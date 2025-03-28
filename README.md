@@ -32,7 +32,7 @@ Example:
 ╹━━    ┗┛  ┻┛┗┛┗┛┗   ┛┗┗┗┻┗━┗┛┗┛┗    ━━╹
    - By enzym3 (github.com/e-nzym3) -
 
-[*] Reading firmware.cur file for processing...
+[*] Reading firmware.dump file for processing...
 [*] Processing complete! Resulting file is: firmware_output.bin
 
 ❯ ls
