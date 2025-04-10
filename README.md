@@ -8,36 +8,58 @@ go install github.com/e-nzym3/uboot-md2bin@latest
 
 # Usage
 ```
-Usage: uboot-md2bin <fileName>
--- Converts standard U-Boot md command output to a binary file
+Usage: uboot-md2bin [options] <fileName>
+Options:
+  --fix    Fix non-sequential memory addresses
+  -h, --help    Display this help message
 ```
-Ensure to only have the memory dump in the file you are trying to process. Strip it from any u-boot command output. See example below for appropriate format. <br><br>
-Example:
+
+# Features
+- Converts U-Boot memory dump output to binary files
+- Validates input format to ensure correct memory dump structure
+- Option to fix non-sequential memory addresses with `--fix` flag
+
+# Input Format
+The tool expects each line to follow this exact format:
 ```
-❯ head firmware.bin
-80000000: 00 00 00 03 00 00 00 01 ff ff 66 77 00 00 00 00    ..........fw....
-80000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
-80000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
-80000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
-80000040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
-80000050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
-80000060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
-80000070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
-80000080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
-80000090: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
-❯ uboot-md2bin firmware.bin
+00000000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
+```
+Where:
+- First 8 characters: Memory address in hexadecimal
+- Followed by colon and space
+- 16 space-separated hex bytes
+- 4 spaces
+- 16 ASCII characters representing the hex bytes
+- Line ending
+
+<b>Note: This is the standard format that the u-boot command `md.b` spits out. </b><br><br>
+
+The tool will validate this format before processing and exit if any line doesn't match.
+
+# Memory Address Fixing
+When using the `--fix` flag, the tool will:
+1. Create a new file with "_fixed" appended to the original filename
+2. Fix any non-sequential memory addresses to be sequential
+3. Process the fixed version to create the binary output
+
+This is useful when dealing with memory dumps that have gaps or non-sequential addresses.
+
+# Example
+```
+# uboot-md2bin --fix rootfs2.dump 
 
 ╻━━    ┳┳  ┳┓            ┓┏┓┓ •      ━━╻
 ┃━━━━  ┃┃━━┣┫┏┓┏┓╋   ┏┳┓┏┫┏┛┣┓┓┏┓  ━━━━┃
 ╹━━    ┗┛  ┻┛┗┛┗┛┗   ┛┗┗┗┻┗━┗┛┗┛┗    ━━╹
    - By enzym3 (github.com/e-nzym3) -
 
-[*] Reading firmware.dump file for processing...
-[*] Processing complete! Resulting file is: firmware_output.bin
-
-❯ ls
-firmware.dump  firmware_output.bin
-
+[*] Reading rootfs2.dump file for processing...
+[*] Validating contents...
+[*] Fixing non-sequential memory addresses...
+[*] Created fixed version: rootfs2_fixed.dump
+[*] Processing complete! Resulting file is: rootfs2_output.bin
 ```
+
 # Credits
-Matt Brown's firmwaretools repo: https://github.com/nmatt0/firmwaretools/tree/master
+https://github.com/nmatt0/firmwaretools/tree/master
+https://github.com/gmbnomis/uboot-mdb-dump
