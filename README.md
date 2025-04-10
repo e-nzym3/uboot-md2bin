@@ -61,5 +61,5 @@ This is useful when dealing with memory dumps that have gaps or non-sequential a
 ```
 
 # Credits
-https://github.com/nmatt0/firmwaretools/tree/master
+https://github.com/nmatt0/firmwaretools/tree/master <br>
 https://github.com/gmbnomis/uboot-mdb-dump
