@@ -32,8 +32,7 @@ Where:
 - 16 ASCII characters representing the hex bytes
 - Line ending
 
-<b>Note: This is the standard format that the u-boot command `md.b` spits out. </b><br><br>
-
+<b>Note: This is the standard format that the u-boot command `md.b` spits out. </b><br>
 The tool will validate this format before processing and exit if any line doesn't match.
 
 # Memory Address Fixing
